@@ -4,6 +4,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+// Dev notes:
+//first time file creation = function CreateFile() = line 33
+//login menu = function LoginCheck() = line 48
+//generation for LoginFile and user login = function Login() = line 69
+//register for new user = function register() = line 109
+//inputting new book = function  WritingToFile() = line 133
+//reading all text from bookList file = function ReadingFromFile() = line 149
+//user searching for a book = function searchingFile() = 165
+//user choosing to quit or use another function = function choseOtherFunction() = line 184
+//overwriting books in bookList.txt = function overwriteFunction = line 222
+// user main menu = function mainMenu() = line 244
+
+
+
 public class Main {
 
 
@@ -167,9 +181,9 @@ public class Main {
         return null;
     }
 
-    public static String Options() throws IOException {
+    public static String choseOtherFunction() throws IOException {
         Scanner input = new Scanner(System.in);
-       int loop =0;
+        int loop = 0;
         try {
             while (loop != 1) {
                 System.out.println("would you like to chose another function [1, = yes] [2 = no]");
@@ -194,24 +208,73 @@ public class Main {
     }
 
 
+    public static String fileToString(String filePath) throws Exception {
+        String input = null;
+        Scanner sc = new Scanner(new File(filePath));
+        StringBuffer sb = new StringBuffer();
+        while (sc.hasNextLine()) {
+            input = sc.nextLine();
+            sb.append(input);
+        }
+        return sb.toString();
+    }
+
+    public static void overwriteFunction() throws FileNotFoundException {
+        try {
+            String filePath = "bookList.txt";
+            String result = fileToString(filePath);
+            System.out.println("Contents of the file: " + result);
+            //Replacing the word with desired one
+            String userTarget = getInput("Enter your Target");
+            String userReplace = getInput("Enter your replacement");
+            result = result.replaceAll(userTarget, userReplace);
+            //Rewriting the contents of the file
+            PrintWriter writer = new PrintWriter(new File(filePath));
+            writer.append(result);
+            writer.flush();
+            System.out.println("Contents of the file after replacing the desired word:");
+            System.out.println(fileToString(filePath));
+        } catch (Exception FileNotFoundException) {
+            FileNotFoundException.printStackTrace();
+        }
+    }
+
+
+
     public static String mainMenu() throws IOException {
+        Scanner input = new Scanner(System.in);
         while (true) {
-            int MenuOptions = Integer.parseInt(getInput("what option would you like to chose 1. inputting new book 2. viewing all available books 3. searching for a specific book"));
-            if (MenuOptions == 1) {
+            int MenuOptions = input.nextInt();
+            System.out.println("user options");
+            System.out.println(" (1) inputting new book");
+            System.out.println(" (2)  viewing all available books");
+            System.out.println(" (3)  searching for a specific book");
+            System.out.println(" (4)  change details for a book");
+
+        if (MenuOptions == 1) {
                 WritingToFile();
-                Options();
+                choseOtherFunction();
                 break;
             }
             if (MenuOptions == 2) {
                 ReadingFromFile();
-                Options();
+                choseOtherFunction();
                 break;
             }
             if (MenuOptions == 3) {
                 searchingFile();
-                Options();
+                choseOtherFunction();
                 break;
-            } else {
+            }
+
+            if (MenuOptions == 4) {
+                overwriteFunction();
+                choseOtherFunction();
+                break;
+            }
+
+
+             else {
                 System.out.println("invalid option try again");
             }
 
@@ -229,10 +292,11 @@ public class Main {
     public static void main (String[]args) throws IOException {
 
         //CreateFile();
-        LoginCheck();
+        //LoginCheck();
         //WritingToFile();
         //ReadingFromFile();
         //searchingFile();
+        //overwriteFunction();
 
     }
 }
