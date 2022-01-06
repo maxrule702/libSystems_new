@@ -220,20 +220,58 @@ public class Main {
     }
 
     public static void overwriteFunction() throws FileNotFoundException {
+        Scanner in = null;
+        Scanner input = new Scanner(System.in);
+       int check = 0;
         try {
-            String filePath = "bookList.txt";
-            String result = fileToString(filePath);
-            System.out.println("Contents of the file: " + result);
-            //Replacing the word with desired one
-            String userTarget = getInput("Enter your Target");
-            String userReplace = getInput("Enter your replacement");
-            result = result.replaceAll(userTarget, userReplace);
-            //Rewriting the contents of the file
-            PrintWriter writer = new PrintWriter(new File(filePath));
-            writer.append(result);
-            writer.flush();
-            System.out.println("Contents of the file after replacing the desired word:");
-            System.out.println(fileToString(filePath));
+            while(check !=1) {
+                System.out.println("please chose...  1 = edit a book   2 = delete a book");
+                int userchoice = input.nextInt();
+                if (userchoice == 1) {
+                    String filePath = "bookList.txt";
+                    String result = fileToString(filePath);
+                    System.out.println("Contents of the file: " + result);
+                    //Replacing the word with desired one
+                    String userTarget = getInput("Enter your Target");
+                    String userReplace = getInput("Enter your replacement");
+                    result = result.replaceAll(userTarget, userReplace);
+                    //Rewriting the contents of the file
+                    PrintWriter writer = new PrintWriter(new File(filePath));
+                    writer.append(result);
+                    writer.flush();
+                    System.out.println("Contents of the file after replacing the desired word:");
+                    System.out.println(fileToString(filePath));
+                    check++;
+                }
+                if (userchoice == 2) {
+                    String filePath = "bookList.txt";
+                    String result = fileToString(filePath);
+                    System.out.println("Contents of the file: " + result);
+                    //search function
+                    String userSearch = getInput("Enter your search");
+                    File file = new File("bookList.txt");
+                    in = new Scanner(file);
+                    while (in.hasNext()) {
+                        String line = in.nextLine();
+                        if (line.contains(userSearch))
+                            System.out.println(line);
+                        String userTarget = line;
+                        String userReplace = "";
+                        result = result.replaceAll(userTarget, userReplace);
+                        //Rewriting the contents of the file
+                        PrintWriter writer = new PrintWriter(new File(filePath));
+                        writer.append(result);
+                        writer.flush();
+                        System.out.println("Contents of the file after deletion");
+                        System.out.println(fileToString(filePath));
+                        check++;
+                    }
+
+                }
+                else {
+                    System.out.println("book not found or choice invalid");
+                }
+            }
         } catch (Exception FileNotFoundException) {
             FileNotFoundException.printStackTrace();
         }
@@ -296,7 +334,7 @@ public class Main {
         //WritingToFile();
         //ReadingFromFile();
         //searchingFile();
-        //overwriteFunction();
+        overwriteFunction();
 
     }
 }
