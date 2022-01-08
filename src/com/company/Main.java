@@ -76,14 +76,13 @@ public class Main {
             while (check != 1) {
                 Scanner scanner = new Scanner(file);
                 int lineNum = 0;
-                String userSearch = getInput("please enter your username , if you see this message more than once youve enter your details incorrectly");
+                String userSearch = getInput("please enter your username , if you see this message more than once you've enter your details incorrectly");
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
                     lineNum++;
                     allLinesCheck++;
                     if (line.contains(userSearch)) {
                         System.out.println("welcome back " + userSearch);
-
                         String passSearch = getInput("please enter your password");
                         String passwordline = Files.readAllLines(Paths.get("LoginFile.txt")).get(lineNum);
                         if (passSearch.equalsIgnoreCase(passwordline)) {
@@ -137,7 +136,7 @@ public class Main {
         int ISBN = Integer.parseInt(getInput("ISBN"));
         String Author = getInput("Enter your Author's name");
         String genre = getInput("Enter your genre type");
-        String info = (bookTitle + "," + ISBN + "," + Author + "," + genre);
+        String info = (bookTitle + "," + ISBN + "," + Author + "," + genre + "," + "available");
         FileWriter writer = new FileWriter("bookList.txt", true);
         BufferedWriter bw = new BufferedWriter(writer);
         writer.write(info);
@@ -145,6 +144,81 @@ public class Main {
         writer.close();
         return info;
     }
+
+    public static String borrowersStatus() throws IOException {
+        Scanner in = null;
+        int allLinesCheck = 0;
+        int lineNum = 0;
+       int userinput = Integer.parseInt(getInput("(1 borrow a book or check availability)"));
+       if(userinput == 1){
+           try {
+               String userSearch = getInput("Enter your search");
+               File file = new File("bookList.txt");
+               in = new Scanner(file);
+               while (in.hasNext()) {
+                   String line = in.nextLine();
+                   if (line.contains(userSearch))
+                       System.out.println(line);
+                   Scanner scanner = new Scanner(file);
+                   while (scanner.hasNextLine()) {
+
+                       if(line.contains("loaned") || line.contains(userSearch)){
+                           System.out.println("sorry this book is currently loaned");
+                           break;
+                       }
+
+                       if (line.contains("available") || line.contains(userSearch)) {
+                           System.out.println("this book is available");
+
+                          int loanbook = Integer.parseInt(getInput("(1 loan book?), (2 return to functions)"));
+                            if (loanbook == 1) {
+                                String filePath = "bookList.txt";
+                                try {
+                                    String result = fileToString(filePath);
+                                    //Replacing the word with desired one
+                                    String userTarget = "available";
+                                    String userReplace = "loaned";
+                                    result = result.replaceAll(userTarget, userReplace);
+                                    //Rewriting the contents of the file
+                                    PrintWriter writer = new PrintWriter(new File(filePath));
+                                    writer.append(result);
+                                    writer.flush();
+                                    System.out.println("book successfully loaned");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                           break;
+                       } else {
+                           if (allLinesCheck > lineNum) {
+                               System.out.println("book not found");
+                               break;
+
+                           }
+                       }
+                   }
+               }
+
+           } catch (FileNotFoundException e) {
+               e.printStackTrace();
+           }
+       }
+
+
+
+
+
+
+
+
+
+        return null;
+    }
+
+
+
+
+
 
     public static String ReadingFromFile() throws IOException {
         String data = null;
@@ -282,12 +356,14 @@ public class Main {
     public static String mainMenu() throws IOException {
         Scanner input = new Scanner(System.in);
         while (true) {
-            int MenuOptions = input.nextInt();
+
             System.out.println("user options");
             System.out.println(" (1) inputting new book");
             System.out.println(" (2)  viewing all available books");
             System.out.println(" (3)  searching for a specific book");
             System.out.println(" (4)  change details for a book");
+            System.out.println(" (5)  book loans");
+            int MenuOptions = input.nextInt();
 
         if (MenuOptions == 1) {
                 WritingToFile();
@@ -307,6 +383,11 @@ public class Main {
 
             if (MenuOptions == 4) {
                 overwriteFunction();
+                choseOtherFunction();
+                break;
+            }
+            if(MenuOptions ==5){
+                borrowersStatus();
                 choseOtherFunction();
                 break;
             }
@@ -334,8 +415,8 @@ public class Main {
         //WritingToFile();
         //ReadingFromFile();
         //searchingFile();
-        overwriteFunction();
-
+        //overwriteFunction();
+        mainMenu();
     }
 }
 
