@@ -10,6 +10,7 @@ import java.util.Scanner;
 //generation for LoginFile and user login = function Login() = line 69
 //register for new user = function register() = line 109
 //inputting new book = function  WritingToFile() = line 133
+//borrow status = function borrowersStatus() = line 148
 //reading all text from bookList file = function ReadingFromFile() = line 149
 //user searching for a book = function searchingFile() = 165
 //user choosing to quit or use another function = function choseOtherFunction() = line 184
@@ -87,6 +88,7 @@ public class Main {
                         String passwordline = Files.readAllLines(Paths.get("LoginFile.txt")).get(lineNum);
                         if (passSearch.equalsIgnoreCase(passwordline)) {
                             System.out.println("correct");
+                            Globalusername = userSearch;
                             check++;
                             break;
                         }
@@ -145,6 +147,22 @@ public class Main {
         return info;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static String borrowersStatus() throws IOException {
         Scanner in = null;
         int allLinesCheck = 0;
@@ -162,12 +180,12 @@ public class Main {
                    Scanner scanner = new Scanner(file);
                    while (scanner.hasNextLine()) {
 
-                       if(line.contains("loaned") || line.contains(userSearch)){
+                       if(line.contains("loaned") && line.contains(userSearch)){
                            System.out.println("sorry this book is currently loaned");
                            break;
                        }
 
-                       if (line.contains("available") || line.contains(userSearch)) {
+                       if (line.contains("available") && line.contains(userSearch)) {
                            System.out.println("this book is available");
 
                           int loanbook = Integer.parseInt(getInput("(1 loan book?), (2 return to functions)"));
@@ -181,9 +199,31 @@ public class Main {
                                     result = result.replaceAll(userTarget, userReplace);
                                     //Rewriting the contents of the file
                                     PrintWriter writer = new PrintWriter(new File(filePath));
+                                    writer.write("\n");
                                     writer.append(result);
                                     writer.flush();
                                     System.out.println("book successfully loaned");
+
+                                    try {
+
+                                        String filePath2 = "LoginFile.txt";
+                                        String result2 = fileToString(filePath2);
+                                        String userTarget2 = (String) Globalusername;
+                                        String userReplace2 = (String) Globalusername + "loaned" + userSearch;
+                                        result2 = result2.replace(userTarget2, userReplace2);
+                                        //Rewriting the contents of the file
+                                        PrintWriter writer2 = new PrintWriter(new File(filePath2));
+                                        writer.append(result2);
+                                        writer.flush();
+                                        System.out.println("test");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+
+
+
+
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -411,7 +451,7 @@ public class Main {
     public static void main (String[]args) throws IOException {
 
         //CreateFile();
-        //LoginCheck();
+        LoginCheck();
         //WritingToFile();
         //ReadingFromFile();
         //searchingFile();
