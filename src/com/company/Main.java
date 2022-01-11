@@ -25,6 +25,7 @@ public class Main {
     private static File bookfile = new File("bookList.txt");
     private static File LoginCheck = new File("LoginFile.txt");
     private static Object Globalusername = "";
+    private static Object password = "";
 
 
     public static String getInput(String prompt) {
@@ -89,6 +90,7 @@ public class Main {
                         if (passSearch.equalsIgnoreCase(passwordline)) {
                             System.out.println("correct");
                             Globalusername = userSearch;
+                            password = passSearch;
                             check++;
                             break;
                         }
@@ -147,10 +149,62 @@ public class Main {
         return info;
     }
 
+    public static String userBooks() throws IOException {
+        Scanner in = null;
+        String username = "";
+         Globalusername =  username;
+        try {
+
+            File file = new File("LoginFile.txt");
+            in = new Scanner(file);
+            while (in.hasNext()) {
+                String line = in.nextLine();
+                if (line.contains(username)) {
+                    System.out.println(line);
+                    FileWriter writer = new FileWriter("LoginFile.txt", true);
+                    BufferedWriter bw = new BufferedWriter(writer);
+                    writer.append("info");
+                    writer.close();
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 
 
+
+
+
+
+
+
+
+
+
+//        try {
+
+//            String filePath2 = "LoginFile.txt";
+//            String result2 = fileToString(filePath2);
+//            String userTarget2 = (String) Globalusername + ",line" ;
+//            String userReplace2 = (String) Globalusername + ",line";
+//            result2 = result2.replace(userTarget2, userReplace2);
+//            //Rewriting the contents of the file
+//            PrintWriter writer2 = new PrintWriter(new File(filePath2));
+//            writer2.append(result2);
+//            writer2.append("\n");
+//            writer2.append((String) password);
+//            writer2.flush();
+//            System.out.println("test");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
 
 
@@ -167,28 +221,30 @@ public class Main {
         Scanner in = null;
         int allLinesCheck = 0;
         int lineNum = 0;
-       int userinput = Integer.parseInt(getInput("(1 borrow a book or check availability)"));
-       if(userinput == 1){
-           try {
-               String userSearch = getInput("Enter your search");
-               File file = new File("bookList.txt");
-               in = new Scanner(file);
-               while (in.hasNext()) {
-                   String line = in.nextLine();
-                   if (line.contains(userSearch))
-                       System.out.println(line);
-                   Scanner scanner = new Scanner(file);
-                   while (scanner.hasNextLine()) {
+        int userinput = Integer.parseInt(getInput("(1 borrow a book or check availability)"));
+        if(userinput == 1){
+            try {
+                String userSearch = getInput("Enter your search");
+                File file = new File("bookList.txt");
+                in = new Scanner(file);
+                while (in.hasNext()) {
+                    String line = in.nextLine();
+                    if (line.contains(userSearch))
+                        System.out.println(line);
 
-                       if(line.contains("loaned") && line.contains(userSearch)){
-                           System.out.println("sorry this book is currently loaned");
-                           break;
-                       }
 
-                       if (line.contains("available") && line.contains(userSearch)) {
-                           System.out.println("this book is available");
+                    Scanner scanner = new Scanner(file);
+                    while (scanner.hasNextLine()) {
 
-                          int loanbook = Integer.parseInt(getInput("(1 loan book?), (2 return to functions)"));
+                        if(line.contains("loaned") && line.contains(userSearch)){
+                            System.out.println("sorry this book is currently loaned");
+                            break;
+                        }
+
+                        if (line.contains("available") && line.contains(userSearch)) {
+                            System.out.println("this book is available");
+
+                            int loanbook = Integer.parseInt(getInput("(1 loan book?), (2 return to functions)"));
                             if (loanbook == 1) {
                                 String filePath = "bookList.txt";
                                 try {
@@ -202,47 +258,29 @@ public class Main {
                                     writer.write("\n");
                                     writer.append(result);
                                     writer.flush();
+                                    writer.close();
                                     System.out.println("book successfully loaned");
-
-                                    try {
-
-                                        String filePath2 = "LoginFile.txt";
-                                        String result2 = fileToString(filePath2);
-                                        String userTarget2 = (String) Globalusername;
-                                        String userReplace2 = (String) Globalusername + "loaned" + userSearch;
-                                        result2 = result2.replace(userTarget2, userReplace2);
-                                        //Rewriting the contents of the file
-                                        PrintWriter writer2 = new PrintWriter(new File(filePath2));
-                                        writer.append(result2);
-                                        writer.flush();
-                                        System.out.println("test");
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
-
-
 
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
-                           break;
-                       } else {
-                           if (allLinesCheck > lineNum) {
-                               System.out.println("book not found");
-                               break;
+                            break;
+                        } else {
+                            if (allLinesCheck > lineNum) {
+                                System.out.println("book not found");
+                                break;
 
-                           }
-                       }
-                   }
-               }
+                            }
+                        }
+                    }
+                }
 
-           } catch (FileNotFoundException e) {
-               e.printStackTrace();
-           }
-       }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
 
 
@@ -309,6 +347,7 @@ public class Main {
                 if (userinput == 2) {
                     System.out.println("goodbye");
                     loop++;
+                    break;
                 } else {
                     System.out.println("invalid input try again");
 
@@ -336,7 +375,7 @@ public class Main {
     public static void overwriteFunction() throws FileNotFoundException {
         Scanner in = null;
         Scanner input = new Scanner(System.in);
-       int check = 0;
+        int check = 0;
         try {
             while(check !=1) {
                 System.out.println("please chose...  1 = edit a book   2 = delete a book");
@@ -403,9 +442,10 @@ public class Main {
             System.out.println(" (3)  searching for a specific book");
             System.out.println(" (4)  change details for a book");
             System.out.println(" (5)  book loans");
+            System.out.println("(6) adding books to users");
             int MenuOptions = input.nextInt();
 
-        if (MenuOptions == 1) {
+            if (MenuOptions == 1) {
                 WritingToFile();
                 choseOtherFunction();
                 break;
@@ -432,8 +472,14 @@ public class Main {
                 break;
             }
 
+            if(MenuOptions ==6){
+                userBooks();
+                choseOtherFunction();
+                break;
+            }
 
-             else {
+
+            else {
                 System.out.println("invalid option try again");
             }
 
