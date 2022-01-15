@@ -24,6 +24,7 @@ public class Main {
 
     private static File bookfile = new File("bookList.txt");
     private static File LoginCheck = new File("LoginFile.txt");
+    private static File loanedBooks = new File("loanedBooks.txt");
     private static Object Globalusername = "";
     private static Object password = "";
 
@@ -149,62 +150,37 @@ public class Main {
         return info;
     }
 
-    public static String userBooks() throws IOException {
-        Scanner in = null;
-        String username = "";
-         Globalusername =  username;
-        try {
-
-            File file = new File("LoginFile.txt");
-            in = new Scanner(file);
-            while (in.hasNext()) {
-                String line = in.nextLine();
-                if (line.contains(username)) {
-                    System.out.println(line);
-                    FileWriter writer = new FileWriter("LoginFile.txt", true);
-                    BufferedWriter bw = new BufferedWriter(writer);
-                    writer.append("info");
-                    writer.close();
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
+//    public static String userBooks() throws IOException {
+//        Scanner in = null;
+//        String username = "";
+//         Globalusername =  username;
 //        try {
-
-//            String filePath2 = "LoginFile.txt";
-//            String result2 = fileToString(filePath2);
-//            String userTarget2 = (String) Globalusername + ",line" ;
-//            String userReplace2 = (String) Globalusername + ",line";
-//            result2 = result2.replace(userTarget2, userReplace2);
-//            //Rewriting the contents of the file
-//            PrintWriter writer2 = new PrintWriter(new File(filePath2));
-//            writer2.append(result2);
-//            writer2.append("\n");
-//            writer2.append((String) password);
-//            writer2.flush();
-//            System.out.println("test");
-//        } catch (Exception e) {
+//            FileWriter writer = new FileWriter("loanedBooks.txt", true);
+//            BufferedWriter bw = new BufferedWriter(writer);
+//            writer.write(userSearch);
+//            writer.write("\n");
+//            writer.close();
+//
+//
+//        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
 //        }
 //        return null;
 //    }
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -250,8 +226,8 @@ public class Main {
                                 try {
                                     String result = fileToString(filePath);
                                     //Replacing the word with desired one
-                                    String userTarget = "available";
-                                    String userReplace = "loaned";
+                                    String userTarget = line;
+                                    String userReplace = "";
                                     result = result.replaceAll(userTarget, userReplace);
                                     //Rewriting the contents of the file
                                     PrintWriter writer = new PrintWriter(new File(filePath));
@@ -260,8 +236,17 @@ public class Main {
                                     writer.flush();
                                     writer.close();
                                     System.out.println("book successfully loaned");
+                                    try {
+                                        FileWriter writer2 = new FileWriter("loanedBooks.txt", true);
+                                        BufferedWriter bw2 = new BufferedWriter(writer2);
+                                        writer2.write(line + " " + "loaned by " + Globalusername);
+                                        writer2.write("\n");
+                                        writer2.close();
 
 
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -350,7 +335,7 @@ public class Main {
                     break;
                 } else {
                     System.out.println("invalid input try again");
-
+break;
                 }
             }
 
@@ -473,7 +458,6 @@ public class Main {
             }
 
             if(MenuOptions ==6){
-                userBooks();
                 choseOtherFunction();
                 break;
             }
