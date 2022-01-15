@@ -333,7 +333,8 @@ public class Main {
                     System.out.println("goodbye");
                     loop++;
                     break;
-                } else {
+                }
+                else {
                     System.out.println("invalid input try again");
 break;
                 }
@@ -342,6 +343,7 @@ break;
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -466,7 +468,7 @@ break;
             else {
                 System.out.println("invalid option try again");
             }
-
+            break;
         }
         return null;
     }
@@ -486,7 +488,6 @@ break;
         //ReadingFromFile();
         //searchingFile();
         //overwriteFunction();
-        mainMenu();
     }
 }
 
