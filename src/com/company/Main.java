@@ -137,58 +137,28 @@ public class Main {
 
 
     public static String WritingToFile() throws IOException {
-        String bookTitle = getInput("Enter your book's name");
-        int ISBN = Integer.parseInt(getInput("ISBN"));
-        String Author = getInput("Enter your Author's name");
-        String genre = getInput("Enter your genre type");
-        String info = (bookTitle + "," + ISBN + "," + Author + "," + genre + "," + "available");
-        FileWriter writer = new FileWriter("bookList.txt", true);
-        BufferedWriter bw = new BufferedWriter(writer);
-        writer.write(info);
-        writer.write("\n");
-        writer.close();
-        return info;
+        try {
+
+            String bookTitle = getInput("Enter your book's name");
+            int ISBN = Integer.parseInt(getInput("ISBN"));
+            String Author = getInput("Enter your Author's name");
+            String genre = getInput("Enter your genre type");
+            String info = (bookTitle + "," + ISBN + "," + Author + "," + genre + "," + "available");
+            FileWriter writer = new FileWriter("bookList.txt", true);
+            BufferedWriter bw = new BufferedWriter(writer);
+            writer.write("\n");
+            writer.write(info);
+            writer.write("\n");
+            writer.close();
+            return info;
+        } catch (NumberFormatException e) {
+            System.out.println("incorrect input format");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Writing to file failed");;
+        }
+        return null;
     }
-
-//    public static String userBooks() throws IOException {
-//        Scanner in = null;
-//        String username = "";
-//         Globalusername =  username;
-//        try {
-//            FileWriter writer = new FileWriter("loanedBooks.txt", true);
-//            BufferedWriter bw = new BufferedWriter(writer);
-//            writer.write(userSearch);
-//            writer.write("\n");
-//            writer.close();
-//
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -336,7 +306,7 @@ public class Main {
                 }
                 else {
                     System.out.println("invalid input try again");
-break;
+                break;
                 }
             }
 
@@ -429,7 +399,6 @@ break;
             System.out.println(" (3)  searching for a specific book");
             System.out.println(" (4)  change details for a book");
             System.out.println(" (5)  book loans");
-            System.out.println("(6) adding books to users");
             int MenuOptions = input.nextInt();
 
             if (MenuOptions == 1) {
@@ -459,10 +428,6 @@ break;
                 break;
             }
 
-            if(MenuOptions ==6){
-                choseOtherFunction();
-                break;
-            }
 
 
             else {
@@ -484,10 +449,7 @@ break;
 
         //CreateFile();
         LoginCheck();
-        //WritingToFile();
-        //ReadingFromFile();
-        //searchingFile();
-        //overwriteFunction();
+
     }
 }
 
